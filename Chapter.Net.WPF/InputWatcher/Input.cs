@@ -9,12 +9,13 @@ using Chapter.Net.WinAPI.Data;
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF;
-
-/// <summary>
-///     The base class for the mouse or keyboard inputs used in the <see cref="IInputWatcher" />.
-/// </summary>
-public abstract class Input
+namespace Chapter.Net.WPF
 {
-    internal abstract void Handle(WH hookType, IntPtr wParam, IntPtr lParam);
+    /// <summary>
+    ///     The base class for the mouse or keyboard inputs used in the <see cref="IInputWatcher" />.
+    /// </summary>
+    public abstract class Input
+    {
+        internal abstract void Handle(WH hookType, IntPtr wParam, IntPtr lParam);
+    }
 }

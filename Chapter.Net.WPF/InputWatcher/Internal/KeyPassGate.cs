@@ -11,39 +11,34 @@ using Chapter.Net.WinAPI.Data;
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF;
-
-internal class KeyPassGate
+namespace Chapter.Net.WPF
 {
-    public KeyPassGate(Key key, KeyPressState keyPressState)
+    internal class KeyPassGate
     {
-        Key = key;
-        KeyPressState = keyPressState;
-    }
-
-    public Key Key { get; }
-    public KeyPressState KeyPressState { get; }
-
-    public bool Pass(IntPtr wParam, IntPtr lParam)
-    {
-        var key = KeyInterop.KeyFromVirtualKey(Marshal.ReadInt32(lParam));
-        if (key != Key)
-            return false;
-
-#if NET6_0
-        return KeyPressState switch
+        public KeyPassGate(Key key, KeyPressState keyPressState)
         {
-            KeyPressState.Down => wParam.ToInt32() == WM.KEYDOWN || wParam.ToInt32() == WM.SYSKEYDOWN,
-            KeyPressState.Up => wParam.ToInt32() == WM.KEYUP || wParam.ToInt32() == WM.SYSKEYUP,
-            _ => false
-        };
-#else
-        return KeyPressState switch
+            Key = key;
+            KeyPressState = keyPressState;
+        }
+
+        public Key Key { get; }
+        public KeyPressState KeyPressState { get; }
+
+        public bool Pass(IntPtr wParam, IntPtr lParam)
         {
-            KeyPressState.Down => wParam == WM.KEYDOWN || wParam == WM.SYSKEYDOWN,
-            KeyPressState.Up => wParam == WM.KEYUP || wParam == WM.SYSKEYUP,
-            _ => false
-        };
-#endif
+            var key = KeyInterop.KeyFromVirtualKey(Marshal.ReadInt32(lParam));
+            if (key != Key)
+                return false;
+
+            switch (KeyPressState)
+            {
+                case KeyPressState.Down:
+                    return wParam.ToInt32() == WM.KEYDOWN || wParam.ToInt32() == WM.SYSKEYDOWN;
+                case KeyPressState.Up:
+                    return wParam.ToInt32() == WM.KEYUP || wParam.ToInt32() == WM.SYSKEYUP;
+                default:
+                    return false;
+            }
+        }
     }
 }

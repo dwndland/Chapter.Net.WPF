@@ -6,20 +6,21 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF;
-
-/// <summary>
-///     Represents a press state.
-/// </summary>
-public enum KeyPressState
+namespace Chapter.Net.WPF
 {
     /// <summary>
-    ///     The key was pressed.
+    ///     Represents a press state.
     /// </summary>
-    Down,
+    public enum KeyPressState
+    {
+        /// <summary>
+        ///     The key was pressed.
+        /// </summary>
+        Down,
 
-    /// <summary>
-    ///     The key was released.
-    /// </summary>
-    Up
+        /// <summary>
+        ///     The key was released.
+        /// </summary>
+        Up
+    }
 }

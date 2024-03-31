@@ -6,25 +6,26 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF;
-
-/// <summary>
-///     The theme to use.
-/// </summary>
-public enum WindowTheme
+namespace Chapter.Net.WPF
 {
     /// <summary>
-    ///     Light mode.
+    ///     The theme to use.
     /// </summary>
-    Light,
+    public enum WindowTheme
+    {
+        /// <summary>
+        ///     Light mode.
+        /// </summary>
+        Light,
 
-    /// <summary>
-    ///     Dark mode.
-    /// </summary>
-    Dark,
+        /// <summary>
+        ///     Dark mode.
+        /// </summary>
+        Dark,
 
-    /// <summary>
-    ///     Same as system.
-    /// </summary>
-    System
+        /// <summary>
+        ///     Same as system.
+        /// </summary>
+        System
+    }
 }

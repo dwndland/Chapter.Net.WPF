@@ -6,67 +6,70 @@
 
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using Chapter.Net.WinAPI;
 using Chapter.Net.WinAPI.Data;
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF;
-
-/// <summary>
-///     Provides a callback to native windows events.
-/// </summary>
-public class WindowHooks : IWindowHooks
+namespace Chapter.Net.WPF
 {
-    private Action<int, IntPtr, IntPtr> _callback;
-    private IntPtr _hookId;
-
     /// <summary>
-    ///     Creates a new WindowHooks.
+    ///     Provides a callback to native windows events.
     /// </summary>
-    public WindowHooks()
+    public class WindowHooks : IWindowHooks
     {
-        _proc = HookCallback; // Unmanaged callbacks has to be kept alive
-        _hookId = IntPtr.Zero;
-    }
         private readonly User32.Proc _proc;
+        private Action<int, IntPtr, IntPtr> _callback;
+        private IntPtr _hookId;
 
-    /// <summary>
-    ///     Hooks a callback into the window event message queue.
-    /// </summary>
-    /// <param name="process">The process what main module to use.</param>
-    /// <param name="hookType">The type of hooks to listen for.</param>
-    /// <param name="callback">The callback executed if a windows message event arrives.</param>
-    public void HookIn(Process process, WH hookType, Action<int, IntPtr, IntPtr> callback)
-    {
-        _callback = callback;
+        /// <summary>
+        ///     Creates a new WindowHooks.
+        /// </summary>
+        public WindowHooks()
+        {
+            _proc = HookCallback; // Unmanaged callbacks has to be kept alive
+            _hookId = IntPtr.Zero;
+        }
 
-        if (_hookId != IntPtr.Zero)
-            return;
+        /// <summary>
+        ///     Hooks a callback into the window event message queue.
+        /// </summary>
+        /// <param name="process">The process what main module to use.</param>
+        /// <param name="hookType">The type of hooks to listen for.</param>
+        /// <param name="callback">The callback executed if a windows message event arrives.</param>
+        public void HookIn(Process process, WH hookType, Action<int, IntPtr, IntPtr> callback)
+        {
+            _callback = callback;
 
-        using var module = process.MainModule;
+            if (_hookId != IntPtr.Zero)
+                return;
+
+            using (var module = process.MainModule)
+            {
                 _hookId = User32.SetWindowsHookEx((int)hookType, _proc, Kernel32.GetModuleHandle(module?.ModuleName), 0);
-    }
+            }
+        }
 
-    /// <summary>
-    ///     Removes the hook.
-    /// </summary>
-    public void HookOut()
-    {
-        if (_hookId == IntPtr.Zero)
-            return;
+        /// <summary>
+        ///     Removes the hook.
+        /// </summary>
+        public void HookOut()
+        {
+            if (_hookId == IntPtr.Zero)
+                return;
 
             User32.UnhookWindowsHookEx(_hookId);
-        _hookId = IntPtr.Zero;
-    }
+            _hookId = IntPtr.Zero;
+        }
 
-    private IntPtr HookCallback(int code, IntPtr wParam, IntPtr lParam)
-    {
-        if (code < 0)
+        private IntPtr HookCallback(int code, IntPtr wParam, IntPtr lParam)
+        {
+            if (code < 0)
                 return User32.CallNextHookEx(_hookId, code, wParam, lParam);
 
-        _callback(code, wParam, lParam);
+            _callback(code, wParam, lParam);
 
             return User32.CallNextHookEx(_hookId, code, wParam, lParam);
+        }
     }
 }

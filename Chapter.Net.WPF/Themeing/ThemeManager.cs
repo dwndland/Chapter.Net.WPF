@@ -13,59 +13,62 @@ using Microsoft.Win32;
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF;
-
-/// <summary>
-///     Reads or sets the window theme.
-/// </summary>
-public static class ThemeManager
+namespace Chapter.Net.WPF
 {
-    private const string RegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-    private const string RegistryValueName = "AppsUseLightTheme";
-
     /// <summary>
-    ///     Sets the theme to use for the given window.
+    ///     Reads or sets the window theme.
     /// </summary>
-    /// <param name="window">The window to modify.</param>
-    /// <param name="theme">The theme to use.</param>
-    /// <remarks>The window source must be initialized.</remarks>
-    /// <returns>True of the theme got applied to the window; otherwise false.</returns>
-    public static bool SetWindowTheme(Window window, WindowTheme theme)
+    public static class ThemeManager
     {
-        if (theme == WindowTheme.System)
-            theme = GetSystemTheme();
+        private const string RegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
+        private const string RegistryValueName = "AppsUseLightTheme";
 
-        if (IsWindows10OrGreater(17763))
+        /// <summary>
+        ///     Sets the theme to use for the given window.
+        /// </summary>
+        /// <param name="window">The window to modify.</param>
+        /// <param name="theme">The theme to use.</param>
+        /// <remarks>The window source must be initialized.</remarks>
+        /// <returns>True of the theme got applied to the window; otherwise false.</returns>
+        public static bool SetWindowTheme(Window window, WindowTheme theme)
         {
-            var attribute = DWMWA.USE_IMMERSIVE_DARK_MODE_BEFORE_20H1;
-            if (IsWindows10OrGreater(18985))
-                attribute = DWMWA.USE_IMMERSIVE_DARK_MODE;
+            if (theme == WindowTheme.System)
+                theme = GetSystemTheme();
 
-            var useDarkMode = theme == WindowTheme.Dark ? 1 : 0;
-            var handle = new WindowInteropHelper(window).Handle;
-            return Dwmapi.DwmSetWindowAttribute(handle, (int)attribute, ref useDarkMode, sizeof(int)) == 0;
+            if (IsWindows10OrGreater(17763))
+            {
+                var attribute = DWMWA.USE_IMMERSIVE_DARK_MODE_BEFORE_20H1;
+                if (IsWindows10OrGreater(18985))
+                    attribute = DWMWA.USE_IMMERSIVE_DARK_MODE;
+
+                var useDarkMode = theme == WindowTheme.Dark ? 1 : 0;
+                var handle = new WindowInteropHelper(window).Handle;
+                return Dwmapi.DwmSetWindowAttribute(handle, (int)attribute, ref useDarkMode, sizeof(int)) == 0;
+            }
+
+            return false;
         }
 
-        return false;
-    }
+        /// <summary>
+        ///     Gets the theme the system is configured to.
+        /// </summary>
+        /// <returns>WindowTheme.Light or WindowTheme.Dark depending on the system configuration.</returns>
+        public static WindowTheme GetSystemTheme()
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(RegistryKeyPath))
+            {
+                var registryValueObject = key?.GetValue(RegistryValueName);
+                if (registryValueObject == null)
+                    return WindowTheme.Light;
+                var registryValue = (int)registryValueObject;
 
-    /// <summary>
-    ///     Gets the theme the system is configured to.
-    /// </summary>
-    /// <returns>WindowTheme.Light or WindowTheme.Dark depending on the system configuration.</returns>
-    public static WindowTheme GetSystemTheme()
-    {
-        using var key = Registry.CurrentUser.OpenSubKey(RegistryKeyPath);
-        var registryValueObject = key?.GetValue(RegistryValueName);
-        if (registryValueObject == null)
-            return WindowTheme.Light;
-        var registryValue = (int)registryValueObject;
+                return registryValue > 0 ? WindowTheme.Light : WindowTheme.Dark;
+            }
+        }
 
-        return registryValue > 0 ? WindowTheme.Light : WindowTheme.Dark;
-    }
-
-    private static bool IsWindows10OrGreater(int build)
-    {
-        return Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= build;
+        private static bool IsWindows10OrGreater(int build)
+        {
+            return Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= build;
+        }
     }
 }
