@@ -18,7 +18,6 @@ namespace Chapter.Net.WPF;
 /// </summary>
 public class WindowHooks : IWindowHooks
 {
-    private readonly Proc _proc;
     private Action<int, IntPtr, IntPtr> _callback;
     private IntPtr _hookId;
 
@@ -30,6 +29,7 @@ public class WindowHooks : IWindowHooks
         _proc = HookCallback; // Unmanaged callbacks has to be kept alive
         _hookId = IntPtr.Zero;
     }
+        private readonly User32.Proc _proc;
 
     /// <summary>
     ///     Hooks a callback into the window event message queue.
@@ -45,7 +45,7 @@ public class WindowHooks : IWindowHooks
             return;
 
         using var module = process.MainModule;
-        _hookId = SetWindowsHookEx((int)hookType, _proc, GetModuleHandle(module?.ModuleName), 0);
+                _hookId = User32.SetWindowsHookEx((int)hookType, _proc, Kernel32.GetModuleHandle(module?.ModuleName), 0);
     }
 
     /// <summary>
@@ -56,32 +56,17 @@ public class WindowHooks : IWindowHooks
         if (_hookId == IntPtr.Zero)
             return;
 
-        UnhookWindowsHookEx(_hookId);
+            User32.UnhookWindowsHookEx(_hookId);
         _hookId = IntPtr.Zero;
     }
 
     private IntPtr HookCallback(int code, IntPtr wParam, IntPtr lParam)
     {
         if (code < 0)
-            return CallNextHookEx(_hookId, code, wParam, lParam);
+                return User32.CallNextHookEx(_hookId, code, wParam, lParam);
 
         _callback(code, wParam, lParam);
 
-        return CallNextHookEx(_hookId, code, wParam, lParam);
+            return User32.CallNextHookEx(_hookId, code, wParam, lParam);
     }
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr SetWindowsHookEx(int hookId, Proc callbackFunction, IntPtr moduleHandle, uint threadId);
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool UnhookWindowsHookEx(IntPtr hookId);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr CallNextHookEx(IntPtr hookId, int code, IntPtr wParam, IntPtr lParam);
-
-    [DllImport("kernel32.dll")]
-    private static extern IntPtr GetModuleHandle(string moduleName);
-
-    private delegate IntPtr Proc(int code, IntPtr wParam, IntPtr lParam);
 }
