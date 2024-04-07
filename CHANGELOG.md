@@ -6,10 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Added
-- Added reading of the windows accent colors.
+
+## [2.0.0] - 2024-04-07
 ### Changed
 - Extended the NotifyEventArgs from the window observer with the lParam and wParam.
+### Removed
+- Removed ThemeManager, that gets moved into a new library Chapter.Net.WPF.Theming.
+### Supported .Net Versions
+- .Net Core 3.0
+- .Net Framework 4.5
+- .Net 5 (Windows)
+- .Net 6 (Windows)
+- .Net 7 (Windows)
+- .Net 8 (Windows)
 
 ## [1.1.0] - 2024-03-31
 ### Added

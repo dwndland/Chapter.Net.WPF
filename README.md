@@ -12,7 +12,6 @@ Brings additional behavior and features to WPF in general.
 - **InputWatcher:** Allows to listen for global keyboard or mouse actions without the app be in focus.
 - **PopupHandler:** Implements an auto close event for custom WPF popups.
 - **SystemTexts:** Loads translations for the current windows language from the system.
-- **Themeing:** Checks if the system is on light or dark theme and allows setting it on a WPF window.
 - **UIDispatcher:** Gives easy access to the current UI dispatcher and allows override for unit tests.
 - **VisualTreeAssist:** Provides an easy way to seach for UI controls by any condition in any direction in an easy way.
 - **WindowHooks:** Gives easy ways to hook into the WinAPI queue with custom callbacks.
@@ -149,23 +148,7 @@ Brings additional behavior and features to WPF in general.
     var cancelLabel = SystemTexts.GetString(SystemTexts.CANCEL_CAPTION);
     ```
 
-8. **Themeing:**
-    - Set a WPF window to the current system theme (light or dark).
-    ```csharp
-    public void SetWindowTheme(Window window)
-    {
-        var currentTheme = ThemeManager.GetSystemTheme();
-        ThemeManager.SetWindowTheme(window, currentTheme);
-    }
-    ```
-    ```csharp
-    public void SetWindowTheme(Window window)
-    {
-        ThemeManager.SetWindowTheme(window, WindowTheme.System);
-    }
-    ```
-
-7. **UIDispatcher:**
+8. **UIDispatcher:**
     - Use the UI dispatcher and override on unit tests.
     ```csharp
     public void ViewModel : ObservableObject
@@ -208,7 +191,7 @@ Brings additional behavior and features to WPF in general.
     }
     ```
 
-8. **VisualTreeAssist:**
+9. **VisualTreeAssist:**
     - Find the first child button.
     ```csharp
     var childButton = VisualTreeAssist.FindChild<Button>(this);
@@ -222,7 +205,7 @@ Brings additional behavior and features to WPF in general.
     var firstUserControlInWindow = VisualTreeAssist.GetParentsUntil<UserControl, Window>(this);
     ```
 
-9. **WindowHooks:**
+10. **WindowHooks:**
     - Hook in to global keyboard events
     ```csharp
     public void HookIn()
@@ -241,7 +224,7 @@ Brings additional behavior and features to WPF in general.
     }
     ```
 
-10. **WindowObserver:**
+11. **WindowObserver:**
     - Do something if user double clicked the window title bar.
     ```csharp
     public partial class MainView
