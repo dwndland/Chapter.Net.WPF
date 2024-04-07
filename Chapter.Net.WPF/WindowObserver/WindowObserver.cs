@@ -52,8 +52,8 @@ namespace Chapter.Net.WPF
 
         private IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            NotifyMessage(msg);
-            NotifyCallbacks(msg);
+            NotifyMessage(msg, wParam, lParam);
+            NotifyCallbacks(msg, wParam, lParam);
 
             return IntPtr.Zero;
         }
@@ -63,9 +63,9 @@ namespace Chapter.Net.WPF
         /// </summary>
         public event EventHandler<NotifyEventArgs> Message;
 
-        private void NotifyMessage(int msg)
+        private void NotifyMessage(int msg, IntPtr wParam, IntPtr lParam)
         {
-            Message?.Invoke(this, new NotifyEventArgs(_observedWindow, msg));
+            Message?.Invoke(this, new NotifyEventArgs(_observedWindow, msg, wParam, lParam));
         }
 
         /// <summary>
@@ -103,12 +103,12 @@ namespace Chapter.Net.WPF
             _callbacks.Add(new Callback(messageId, callback));
         }
 
-        private void NotifyCallbacks(int message)
+        private void NotifyCallbacks(int message, IntPtr wParam, IntPtr lParam)
         {
             for (var i = 0; i < _callbacks.Count; i++)
                 if (_callbacks[i].ListenMessageId == null ||
                     _callbacks[i].ListenMessageId == message)
-                    _callbacks[i].Action(new NotifyEventArgs(_observedWindow, message));
+                    _callbacks[i].Action(new NotifyEventArgs(_observedWindow, message, wParam, lParam));
         }
 
         /// <summary>

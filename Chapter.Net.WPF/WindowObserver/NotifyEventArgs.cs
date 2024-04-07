@@ -16,10 +16,12 @@ namespace Chapter.Net.WPF
     /// </summary>
     public sealed class NotifyEventArgs : EventArgs
     {
-        internal NotifyEventArgs(Window observedWindow, int messageId)
+        internal NotifyEventArgs(Window observedWindow, int messageId, IntPtr wParam, IntPtr lParam)
         {
             ObservedWindow = observedWindow;
             MessageId = messageId;
+            WParam = wParam;
+            LParam = lParam;
         }
 
         /// <summary>
@@ -31,5 +33,15 @@ namespace Chapter.Net.WPF
         ///     Gets the appeared WinAPI message.
         /// </summary>
         public int MessageId { get; }
+
+        /// <summary>
+        ///     Gets the wParam of the appeared WinAPI message.
+        /// </summary>
+        public IntPtr WParam { get; }
+
+        /// <summary>
+        ///     Gets the lParam of the appeared WinAPI message.
+        /// </summary>
+        public IntPtr LParam { get; }
     }
 }
