@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2024-06-07
+### Changed
+- Update to support .Net 8 only.
+
 ## [2.0.0] - 2024-04-07
 ### Changed
 - Extended the NotifyEventArgs from the window observer with the lParam and wParam.

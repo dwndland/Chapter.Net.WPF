@@ -8,23 +8,22 @@ using System.Windows.Input;
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF
+namespace Chapter.Net.WPF;
+
+internal class ModifierKeyPassGate
 {
-    internal class ModifierKeyPassGate
+    private readonly ModifierKeys _modifierKeys;
+
+    public ModifierKeyPassGate(ModifierKeys modifierKeys)
     {
-        private readonly ModifierKeys _modifierKeys;
+        _modifierKeys = modifierKeys;
+    }
 
-        public ModifierKeyPassGate(ModifierKeys modifierKeys)
-        {
-            _modifierKeys = modifierKeys;
-        }
+    public bool Pass()
+    {
+        if (_modifierKeys == ModifierKeys.None)
+            return true;
 
-        public bool Pass()
-        {
-            if (_modifierKeys == ModifierKeys.None)
-                return true;
-
-            return Keyboard.Modifiers == _modifierKeys;
-        }
+        return Keyboard.Modifiers == _modifierKeys;
     }
 }

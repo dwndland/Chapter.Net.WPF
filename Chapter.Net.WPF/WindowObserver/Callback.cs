@@ -8,18 +8,17 @@ using System;
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF
+namespace Chapter.Net.WPF;
+
+internal class Callback
 {
-    internal class Callback
+    internal Callback(int? listenMessageId, Action<NotifyEventArgs> callback)
     {
-        internal Callback(int? listenMessageId, Action<NotifyEventArgs> callback)
-        {
-            Action = callback;
-            ListenMessageId = listenMessageId;
-        }
-
-        internal Action<NotifyEventArgs> Action { get; }
-
-        internal int? ListenMessageId { get; }
+        Action = callback;
+        ListenMessageId = listenMessageId;
     }
+
+    internal Action<NotifyEventArgs> Action { get; }
+
+    internal int? ListenMessageId { get; }
 }

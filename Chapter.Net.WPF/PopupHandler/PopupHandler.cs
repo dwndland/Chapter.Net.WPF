@@ -10,48 +10,47 @@ using Chapter.Net.WinAPI.Data;
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF
+namespace Chapter.Net.WPF;
+
+/// <summary>
+///     This objects help to determine when a popup has to be closed. This can be by clicking somewhere else, clicking in
+///     the title bar or moving the window.
+/// </summary>
+public class PopupHandler
 {
+    private Action _closeMethod;
+    private UIElement _observedControl;
+    private WindowObserver _observer;
+
     /// <summary>
-    ///     This objects help to determine when a popup has to be closed. This can be by clicking somewhere else, clicking in
-    ///     the title bar or moving the window.
+    ///     Starts an observing of the window which contains the control to determine when the item has to be closed.
     /// </summary>
-    public class PopupHandler
+    /// <param name="observedControl">The control which owner window has to be observed.</param>
+    /// <param name="closeMethod">
+    ///     The close callback. This gets invoked when the owner window has send notifications to close
+    ///     the popup.
+    /// </param>
+    /// <exception cref="ArgumentNullException">observedControl is null.</exception>
+    /// <exception cref="ArgumentNullException">closeMethod is null.</exception>
+    public void AutoClose(UIElement observedControl, Action closeMethod)
     {
-        private Action _closeMethod;
-        private UIElement _observedControl;
-        private WindowObserver _observer;
+        _observedControl = observedControl ?? throw new ArgumentNullException(nameof(observedControl));
+        _closeMethod = closeMethod ?? throw new ArgumentNullException(nameof(closeMethod));
 
-        /// <summary>
-        ///     Starts an observing of the window which contains the control to determine when the item has to be closed.
-        /// </summary>
-        /// <param name="observedControl">The control which owner window has to be observed.</param>
-        /// <param name="closeMethod">
-        ///     The close callback. This gets invoked when the owner window has send notifications to close
-        ///     the popup.
-        /// </param>
-        /// <exception cref="ArgumentNullException">observedControl is null.</exception>
-        /// <exception cref="ArgumentNullException">closeMethod is null.</exception>
-        public void AutoClose(UIElement observedControl, Action closeMethod)
+        var ownerWindow = Window.GetWindow(observedControl);
+        if (ownerWindow != null)
         {
-            _observedControl = observedControl ?? throw new ArgumentNullException(nameof(observedControl));
-            _closeMethod = closeMethod ?? throw new ArgumentNullException(nameof(closeMethod));
+            _observer = new WindowObserver(ownerWindow);
 
-            var ownerWindow = Window.GetWindow(observedControl);
-            if (ownerWindow != null)
-            {
-                _observer = new WindowObserver(ownerWindow);
-
-                _observer.AddCallbackFor(WM.NCLBUTTONDOWN, _ => CallMethod());
-                _observer.AddCallbackFor(WM.LBUTTONDOWN, _ => CallMethod());
-                _observer.AddCallbackFor(WM.KILLFOCUS, _ => CallMethod());
-            }
+            _observer.AddCallbackFor(WM.NCLBUTTONDOWN, _ => CallMethod());
+            _observer.AddCallbackFor(WM.LBUTTONDOWN, _ => CallMethod());
+            _observer.AddCallbackFor(WM.KILLFOCUS, _ => CallMethod());
         }
+    }
 
-        private void CallMethod()
-        {
-            if (!_observedControl.IsMouseOver)
-                _closeMethod();
-        }
+    private void CallMethod()
+    {
+        if (!_observedControl.IsMouseOver)
+            _closeMethod();
     }
 }

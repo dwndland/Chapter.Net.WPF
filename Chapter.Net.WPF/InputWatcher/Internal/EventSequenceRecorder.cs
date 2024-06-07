@@ -11,42 +11,41 @@ using Chapter.Net.WinAPI;
 
 // ReSharper disable once CheckNamespace
 
-namespace Chapter.Net.WPF
+namespace Chapter.Net.WPF;
+
+internal class EventSequenceRecorder
 {
-    internal class EventSequenceRecorder
+    private readonly List<int> _happened;
+    private readonly Stopwatch _stopwatch;
+    private List<int> _sequence;
+
+    public EventSequenceRecorder()
     {
-        private readonly List<int> _happened;
-        private readonly Stopwatch _stopwatch;
-        private List<int> _sequence;
+        _stopwatch = new Stopwatch();
+        _happened = [];
+    }
 
-        public EventSequenceRecorder()
+    public void Sequence(params int[] events)
+    {
+        _sequence = events.ToList();
+    }
+
+    public bool Pass(int @event)
+    {
+        _happened.Add(@event);
+        if (_happened.Count == 1)
         {
-            _stopwatch = new Stopwatch();
-            _happened = new List<int>();
+            _stopwatch.Restart();
+            return false;
         }
 
-        public void Sequence(params int[] events)
+        var entries = _happened.ToArray();
+        if (_happened.Count == _sequence.Count)
         {
-            _sequence = events.ToList();
+            _stopwatch.Stop();
+            _happened.Clear();
         }
 
-        public bool Pass(int @event)
-        {
-            _happened.Add(@event);
-            if (_happened.Count == 1)
-            {
-                _stopwatch.Restart();
-                return false;
-            }
-
-            var entries = _happened.ToArray();
-            if (_happened.Count == _sequence.Count)
-            {
-                _stopwatch.Stop();
-                _happened.Clear();
-            }
-
-            return _sequence.SequenceEqual(entries) && _stopwatch.Elapsed.TotalMilliseconds <= User32.GetDoubleClickTime();
-        }
+        return _sequence.SequenceEqual(entries) && _stopwatch.Elapsed.TotalMilliseconds <= User32.GetDoubleClickTime();
     }
 }
