@@ -7,7 +7,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
-using Chapter.Net.WinAPI.Data;
+using Chapter.Net.WinAPI;
 
 // ReSharper disable once CheckNamespace
 
