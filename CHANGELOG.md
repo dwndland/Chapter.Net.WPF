@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2024-08-09
+### Added
+- Added possibility to convert a WPF Key enum to char.
+
 ## [3.0.0] - 2024-06-07
 ### Changed
 - Update to support .Net 8 only.
