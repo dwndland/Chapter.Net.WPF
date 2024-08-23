@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/dwndlnd/Chapter.Net.WPF/master/Icon.png" alt="logo" width="64"/>
+<img src="https://raw.githubusercontent.com/dwndland/Chapter.Net.WPF/master/Icon.png" alt="logo" width="64"/>
 
 # Chapter.Net.WPF Library
 
@@ -266,7 +266,7 @@ Brings additional behavior and features to WPF in general.
 
 ## Links
 * [NuGet](https://www.nuget.org/packages/Chapter.Net.WPF)
-* [GitHub](https://github.com/dwndlnd/Chapter.Net.WPF)
+* [GitHub](https://github.com/dwndland/Chapter.Net.WPF)
 
 ## License
 Copyright (c) David Wendland. All rights reserved.
