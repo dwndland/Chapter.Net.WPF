@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2024-09-20
+### Added
+- Added ClipboardAccessor for a more stable access to the windows clipboard for WPF.
+
 ## [3.1.0] - 2024-08-09
 ### Added
 - Added possibility to convert a WPF Key enum to char.
