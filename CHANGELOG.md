@@ -7,17 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.0] - 2024-12-01
+### Added
+- Added .net 9 to the supported .net versions.
+### Supported .Net Versions
+- .Net 8 (Windows)
+- .Net 9 (Windows)
+
 ## [3.2.0] - 2024-09-20
 ### Added
 - Added ClipboardAccessor for a more stable access to the windows clipboard for WPF.
+### Supported .Net Versions
+- .Net 8 (Windows)
 
 ## [3.1.0] - 2024-08-09
 ### Added
 - Added possibility to convert a WPF Key enum to char.
+### Supported .Net Versions
+- .Net 8 (Windows)
 
 ## [3.0.0] - 2024-06-07
 ### Changed
 - Update to support .Net 8 only.
+### Supported .Net Versions
+- .Net 8 (Windows)
 
 ## [2.0.0] - 2024-04-07
 ### Changed
