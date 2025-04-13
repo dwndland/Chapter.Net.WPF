@@ -6,8 +6,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Version>3.3.0</Version>
     <Authors>David Wendland</Authors>
-    <Description>Brings additional behavior and features to WPF in general.</Description>
-    <Copyright>Copyright (c) 2024 David Wendland</Copyright>
+    <Description>Chapter.Net.WPF is a utility library that offers generic WPF helpers such as clipboard access, icon reading, visual tree traversal, window hooks, and more to simplify desktop application development.</Description>
+    <Copyright>Copyright (c) 2025 David Wendland</Copyright>
     <PackageProjectUrl>https://github.com/dwndland/Chapter.Net.WPF</PackageProjectUrl>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>

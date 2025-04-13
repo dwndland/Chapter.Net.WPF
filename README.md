@@ -3,7 +3,7 @@
 # Chapter.Net.WPF Library
 
 ## Overview
-Brings additional behavior and features to WPF in general.
+Chapter.Net.WPF is a utility library that offers generic WPF helpers such as clipboard access, icon reading, visual tree traversal, window hooks, and more to simplify desktop application development.
 
 ## Features
 - **BindingAdapter:** Allows to modify a binding by using another bindings to their properties.
